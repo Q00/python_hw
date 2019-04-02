@@ -108,10 +108,10 @@ def make_matrix():
         return simultaneous(key, process, ans)
 
     simultaneous(1,0, ans)
-    print([a for a in zip(*final_matrix)])
+    #print([a for a in zip(*final_matrix)])
     for alist in list(zip(*final_matrix)):
         for a in alist:
-            print('%8.3f' % abs(a), end= '')
+            print('%8.3f' % a, end= '')
         print()
 
             
