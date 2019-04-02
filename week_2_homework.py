@@ -1,3 +1,5 @@
+##### gaussian elimination
+
 def make_matrix():
     row_list = []
     cell_list = []
@@ -9,7 +11,6 @@ def make_matrix():
         else:
             return 0 
     reverse_matrix = [[check_one(a,b)  for a in range(0, MAX)] for b in range(0, MAX)]
-    print(reverse_matrix)
     matrix = []
     for count in range(0, MAX):
         input_list = input(f"{count} 행을 입력해주세요. ex) 1 2 3 ...\n").split()
@@ -17,7 +18,6 @@ def make_matrix():
     if len(matrix) != MAX:
         print('잘못입력하였습니다.')
         return
-    print(matrix)
     # process_count 는 cell의 인덱스
     def process(matrix, row_index, process_count):
     
@@ -34,23 +34,13 @@ def make_matrix():
             if matrix[row_index][process_count] != 0:
 
                 devide = float(matrix[row_index][process_count] / matrix[process_count][process_count])
-                #print('devide : ',devide)
                 temp_list = list(map(lambda x:float(x*devide), matrix[process_count]))
-                #print('templist')
-                #print(temp_list)
                 temp_reverse_list = list(map(lambda x: float(x*devide), reverse_matrix[process_count]))
-                #print('row_index', row_index)
-                #print(matrix[row_index])
                 process_list = list(map(lambda x,y : x-y, matrix[row_index], temp_list))
                 process_reverse_list = list(map(lambda x,y : x-y, reverse_matrix[row_index], temp_reverse_list))
 
                 matrix[row_index] = process_list
                 reverse_matrix[row_index] = process_reverse_list
-                #print(temp_reverse_list)
-                #print(process_list)
-
-                #print(matrix)
-                #print(reverse_matrix)
                 
                 return process(matrix, row_index+1, process_count)
             else:
@@ -65,8 +55,49 @@ def make_matrix():
         
 
     process(matrix, 0,0)
-    print(matrix)
-    print(len(zip(*matrix)))
+    zip_reverse_matrix = [ list(a) for a in zip(*reverse_matrix)]
+    print(zip_reverse_matrix)
+    
+    # 연립방정식 해 구하기
+    final_matrix = []
+    ans = [] 
+    def simultaneous(key, process, ans):
+        if abs(key)<=MAX:
+            if len(ans) ==0:
+                ans.append(float(zip_reverse_matrix[process][-key]))
+            else:
+                temp = list(reversed(matrix[-key]))
+                k = 0
+                for v in ans:
+                    temp[k] = float(temp[k]*v)
+                    k = k+1
+                sum_simul = zip_reverse_matrix[process][-key] 
+                print('@@@@@@@@',sum_simul)
+                for index in range(0,k):
+                    sum_simul = sum_simul-temp[index]
+                ans.append(sum_simul)
+            key = key + 1
+            print(ans)
+            
+        else:
+            process = process + 1
+            key = 1 
+            final_matrix.append(ans[::-1])
+            ans = []
+            if process ==  MAX:
+                print('finish')
+                return
+            
+        return simultaneous(key, process, ans)
+        
+        
+
+    simultaneous(1,0, ans)
+    print(final_matrix)
+
+
+
+    
     
     
 
