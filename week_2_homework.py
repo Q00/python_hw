@@ -22,7 +22,6 @@ def make_matrix():
     def process(matrix, row_index, process_count):
     
         if matrix[process_count][process_count] != 1:
-            print('이상은',process_count)
             devide = matrix[process_count][process_count]
             matrix[process_count] = list(map(lambda x: float(x/devide), matrix[process_count]))
             reverse_matrix[process_count] = list(map(lambda x: float(x/devide), reverse_matrix[process_count]))
@@ -35,23 +34,23 @@ def make_matrix():
             if matrix[row_index][process_count] != 0:
 
                 devide = float(matrix[row_index][process_count] / matrix[process_count][process_count])
-                print('devide : ',devide)
+                #print('devide : ',devide)
                 temp_list = list(map(lambda x:float(x*devide), matrix[process_count]))
-                print('templist')
-                print(temp_list)
+                #print('templist')
+                #print(temp_list)
                 temp_reverse_list = list(map(lambda x: float(x*devide), reverse_matrix[process_count]))
-                print('row_index', row_index)
-                print(matrix[row_index])
+                #print('row_index', row_index)
+                #print(matrix[row_index])
                 process_list = list(map(lambda x,y : x-y, matrix[row_index], temp_list))
                 process_reverse_list = list(map(lambda x,y : x-y, reverse_matrix[row_index], temp_reverse_list))
 
                 matrix[row_index] = process_list
                 reverse_matrix[row_index] = process_reverse_list
-                print(temp_reverse_list)
-                print(process_list)
+                #print(temp_reverse_list)
+                #print(process_list)
 
-                print(matrix)
-                print(reverse_matrix)
+                #print(matrix)
+                #print(reverse_matrix)
                 
                 return process(matrix, row_index+1, process_count)
             else:
@@ -70,8 +69,6 @@ def make_matrix():
     print(len(zip(*matrix)))
     
     
-
-
 
 make_matrix()
 
