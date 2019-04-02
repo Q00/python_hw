@@ -1,6 +1,26 @@
 ##### gaussian elimination
 import sys
 
+#행렬식
+def determinant(matrix, mul): 
+    width = len(matrix) 
+    if width == 1: 
+        return mul * matrix[0][0] 
+    else: 
+        sign = -1 
+        sum = 0 
+        for i in range(width): 
+            m = [] 
+            for j in range(1, width): 
+                buff = [] 
+                for k in range(width): 
+                    if k != i: 
+                        buff.append(matrix[j][k]) 
+                m.append(buff) 
+            sign =sign*-1 
+            sum =sum +mul*determinant(m, sign * matrix[0][i]) 
+        return sum 
+
 def make_matrix():
     row_list = []
     cell_list = []
@@ -27,13 +47,32 @@ def make_matrix():
     if len(matrix) != MAX:
         print('잘못입력하였습니다.')
         return
+
+    det = determinant(matrix, 1)
+    if det == 0:
+        print('해가 없습니다. 가역행렬이 아닙니다.')
+        sys.exit()
+    def add_rows(matrix, process_count):
+        if process_count < MAX:
+            if matrix[process_count][process_count] != 0:
+                process_count = process_count + 1
+                return add_rows(matrix, process_count) 
+            else:
+                #가역행렬이나 matrix[process_count][process_count]이 0일때는 행을 더해줌
+                for l in range(process_count+1, MAX):
+                    matrix[process_count] = list(map(lambda x,y: x+y, matrix[process_count],matrix[l]))
+                    reverse_matrix[process_count] = list(map(lambda x,y: x+y, reverse_matrix[process_count],reverse_matrix[l]))
+                process_count = process_count+1
+                return add_rows(matrix, process_count)
+        else:
+            return matrix
+    add_rows(matrix,0)
+     
     # process_count 는 cell의 인덱스
     def process(matrix, row_index, process_count):
         try: 
             if matrix[process_count][process_count] != 1:
                 devide = matrix[process_count][process_count]
-                if devide == 0:
-                    raise ZeroDivisionError("해가 없습니다.")
                 matrix[process_count] = list(map(lambda x: float(x/devide), matrix[process_count]))
                 reverse_matrix[process_count] = list(map(lambda x: float(x/devide), reverse_matrix[process_count]))
                 return process(matrix, process_count+1, process_count)
@@ -48,8 +87,6 @@ def make_matrix():
                     temp_list = list(map(lambda x:float(x*devide), matrix[process_count]))
                     temp_reverse_list = list(map(lambda x: float(x*devide), reverse_matrix[process_count]))
                     process_list = list(map(lambda x,y : x-y, matrix[row_index], temp_list))
-                    if set(process_list) == {0.0}:
-                        raise ZeroDivisionError("해가 없습니다.")
                     process_reverse_list = list(map(lambda x,y : x-y, reverse_matrix[row_index], temp_reverse_list))
 
                     matrix[row_index] = process_list
