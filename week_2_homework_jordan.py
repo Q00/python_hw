@@ -112,13 +112,11 @@ def make_matrix():
     #행렬 회전 
     def rotate_matrix( m ):
         return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)] 
-    
-    reverse_matrix = rotate_matrix(rotate_matrix(reverse_matrix))
+     
     process(matrix, 0,0)
     
     reverse_matrix = rotate_matrix(rotate_matrix(reverse_matrix))
     process(rotate_matrix(rotate_matrix(matrix)),0,0)
-    
     final_matrix = reverse_matrix
 
     for alist in list(reversed(final_matrix)):
